@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>For Her</title>
+  <!-- cute rounded font, falls back to your typewriter one if offline -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <section>
+      <h1>Reasons I love you &hearts;</h1>
+      <p id="output" class="message">Click the button</p>
+      <button onclick="showReason()">Tell me why</button>
+    </section>
+
+    <hr>
+
+    <!-- this used to sit OUTSIDE </html>, now it's inside body where it belongs -->
+    <section>
+      <h1>Date night picker</h1>
+      <p id="dateOutput" class="message">Click for a date idea</p>
+      <button onclick="showDate()">Pick a date</button>
+    </section>
+  </main>
+
+  <!-- falling petals get dropped in here by script.js -->
+  <div id="petals" aria-hidden="true"></div>
+
+  <!-- flowers get planted in here by script.js -->
+  <div id="garden" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

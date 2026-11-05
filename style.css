@@ -1,0 +1,157 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  /* soft dusk sky: deep plum at the top fading to warm rose */
+  background: linear-gradient(180deg, #2a2133 0%, #4a2f4f 60%, #7a4560 100%);
+  background-attachment: fixed;
+  color: #fff1e6;
+  font-family: "Fredoka", "American Typewriter", sans-serif;
+  text-align: center;
+  padding: 40px 20px 260px;  /* big bottom padding = room for the garden */
+  box-sizing: border-box;
+}
+
+main { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; }
+
+h1 { font-weight: 600; font-size: 2rem; color: #ffc2d4; margin-bottom: 16px; }
+
+hr { border: none; height: 2px; width: 60px; background: #ffc2d4; opacity: .4; margin: 40px auto; border-radius: 2px; }
+
+.message {
+  min-height: 3.2em;          /* stops the page jumping when the text changes */
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+/* JS re-adds this class every click so the text fades in each time */
+.message.pop { animation: textIn .5s ease-out; }
+@keyframes textIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+button {
+  background-color: #FFA500;
+  color: #3a2200;
+  font-family: inherit;
+  font-weight: 600;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 999px;   /* pill shape */
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform .15s;
+}
+button:hover { transform: scale(1.06) rotate(-2deg); }
+button:active { transform: scale(.94); }
+button:focus-visible { outline: 3px solid #fff1e6; outline-offset: 3px; }
+
+/* ---------- THE GARDEN ---------- */
+#garden {
+  position: fixed;
+  bottom: 0; left: 0;
+  width: 100%; height: 240px;
+  pointer-events: none;   /* clicks go through to the buttons */
+  z-index: 0;
+  overflow: hidden;
+}
+/* little grassy hill at the bottom */
+#garden::after {
+  content: "";
+  position: absolute;
+  bottom: -40px; left: -10%;
+  width: 120%; height: 70px;
+  background: #3f7a4f;
+  border-radius: 50% 50% 0 0;
+}
+
+.flower {
+  position: absolute;
+  bottom: 10px;
+  width: 0;
+  transform-origin: bottom center;
+  animation: sway 3.5s ease-in-out infinite alternate;  /* gentle breeze */
+}
+@keyframes sway { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+
+.stem {
+  position: absolute;
+  bottom: 0; left: -2px;
+  width: 4px;
+  height: var(--h);           /* each flower sets its own height from JS */
+  background: #6fbf73;
+  border-radius: 4px;
+  transform-origin: bottom;
+  animation: grow .9s ease-out both;   /* stem grows up from the ground */
+}
+@keyframes grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+.leaf {
+  position: absolute;
+  bottom: 35%; left: 3px;
+  width: 16px; height: 9px;
+  background: #5aa862;
+  border-radius: 0 100% 0 100%;
+  transform: rotate(-20deg);
+}
+
+.head {
+  position: absolute;
+  bottom: var(--h); left: 0;
+  width: 0; height: 0;
+  animation: bloom .7s .8s cubic-bezier(.3, 1.8, .5, 1) both;  /* pops open AFTER the stem finishes */
+}
+@keyframes bloom { from { transform: scale(0); } to { transform: scale(1); } }
+
+.petal {
+  position: absolute;
+  bottom: 0;
+  left: calc(var(--p) / -2);
+  width: var(--p);
+  height: calc(var(--p) * 1.6);
+  background: var(--c);
+  border-radius: 50%;
+  transform-origin: 50% 100%;   /* pivot at the flower's center */
+  transform: rotate(calc(var(--i) * 360deg / var(--n)));  /* spread petals around the circle */
+}
+
+.core {
+  position: absolute;
+  width: 14px; height: 14px;
+  left: -7px; bottom: -7px;
+  background: #ffd166;
+  border-radius: 50%;
+}
+
+/* people who get motion sick: no animation, flowers just appear */
+@media (prefers-reduced-motion: reduce) {
+  .flower, .stem, .head, .message.pop, button { animation: none; transition: none; }
+}
+
+/* ---------- FALLING PETALS ---------- */
+#petals {
+  position: fixed;
+  inset: 0;                 /* covers the whole screen */
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;               /* behind the text and the garden */
+}
+
+.fall {
+  position: absolute;
+  top: -30px;
+  width: var(--s);
+  height: calc(var(--s) * 1.3);
+  background: var(--c);
+  border-radius: 50% 0 50% 50%;   /* petal-ish teardrop shape */
+  opacity: .85;
+  animation: fall var(--d) linear forwards;
+}
+/* zig-zags side to side while spinning on the way down */
+@keyframes fall {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  25%  { transform: translate(var(--x), 28vh) rotate(90deg); }
+  50%  { transform: translate(calc(var(--x) * -1), 58vh) rotate(200deg); }
+  75%  { transform: translate(var(--x), 86vh) rotate(290deg); }
+  100% { transform: translate(0, 115vh) rotate(380deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #petals { display: none; }
+}
